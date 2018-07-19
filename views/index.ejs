@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="projectRtc">
+    <head>
+        <title>< 郝志强的测试demo ></title>
+
+
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+        <script type="text/javascript" src="javascripts/rtcClient.js"></script>
+
+        <script type="text/javascript" src="javascripts/app.js"></script>
+        <script type="text/javascript" src="javascripts/jquery-3.3.1.js"></script>
+
+
+
+        <script >
+            $(document).ready(function(){
+                $("#refreshBtn").click(function(){
+                    $.get("/streams.json",function(data,status){
+                        data.filter(function (stream) {
+                            console.log( "我拿到了对方的id" + stream.id);
+                            getRemoteID(stream.id);
+                        });
+                    });
+                });
+            });
+        </script>
+
+
+
+
+    </head>
+
+    <body>
+        <h1>这是头</h1>
+        <video id="myVideo" controls autoplay></video>
+        <div id="remoteVideosContainer"></div>
+
+        <Button onclick="initBtn()"> 这是 init button </Button>
+        <Button id="refreshBtn"> 这是 refresh button </Button>
+        <p class="footer">  这是脚  </p>
+    </body>
+</html>
