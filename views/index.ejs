@@ -25,19 +25,21 @@
                 });
             });
         </script>
-
-
-
-
     </head>
 
     <body>
         <h1>这是头</h1>
-        <video id="myVideo" controls autoplay></video>
+
         <div id="remoteVideosContainer"></div>
 
         <Button onclick="initBtn()"> 这是 init button </Button>
         <Button id="refreshBtn"> 这是 refresh button </Button>
         <p class="footer">  这是脚  </p>
+
+        <hr />
+        <!--作用为向服务器申请 是否可以发送offer 创建连接-->
+        <Button onclick="init()" >init</Button>
+        <Button >sendOffer</Button>
+        <Button >init</Button>
     </body>
 </html>

@@ -1,4 +1,4 @@
-var PeerManager =  (function () {
+var PeerManager = (function () {
     console.log("PeerManager 初始化");
 
     var localId,
@@ -28,7 +28,7 @@ var PeerManager =  (function () {
     function handleMessage(message) {
         var type = message.type,
             from = message.from,
-            pc = peerDatabase[from] ;
+            pc = peerDatabase[from];
 
         console.log(" socket 接收到信息");
         console.log("type为 " + type + "  来自 " + from);
@@ -38,11 +38,11 @@ var PeerManager =  (function () {
 
                 break;
             case 'offer':
-                console .log("网页端接收到 offer  现在正在准备给你一个answer");
+                console.log("网页端接收到 offer  现在正在准备给你一个answer");
                 console.log(pc);
                 pc.pc.setRemoteDescription(
                     new RTCSessionDescription(message.payload),
-                    function (){
+                    function () {
                         console.log("这里是运行成功了");
                     },
                     function () {
@@ -77,7 +77,7 @@ var PeerManager =  (function () {
             case 'readyToStream':
                 console.log(from);
 
-                peer =  addPeer(from);
+                peer = addPeer(from);
                 send('pleaseSendOffer', from, null);
         }
 
@@ -88,12 +88,12 @@ var PeerManager =  (function () {
     }
 
     function addPeer(remoteId) {
-        console .log("addPeer");
+        console.log("addPeer");
         // 对应的配置
         var peer = new Peer(config.peerConnectionConfig, config.peerConnectionConstraints);
 
         peer.pc.onicecandidate = function (event) {
-            console .log("onicecandidate ");
+            console.log("onicecandidate ");
             if (event.candidate) {
                 send('candidate', remoteId, {
                     label: event.candidate.sdpMLineIndex,
@@ -105,7 +105,7 @@ var PeerManager =  (function () {
 
 
         peer.pc.onaddstream = function (event) {
-            console .log("onaddstream 现在已经获取到 媒体流 了");
+            console.log("onaddstream 现在已经获取到 媒体流 了");
 
             // 将远方的视频流 于视频标签内显示出来
             attachMediaStream(peer.remoteVideoEl, event.stream);
@@ -132,7 +132,7 @@ var PeerManager =  (function () {
         return peer;
     }
 
-     function attachMediaStream(element, stream) {
+    function attachMediaStream(element, stream) {
         console.log("哈哈  我才是调用的函数");
         if (typeof element.srcObject !== 'undefined') {
             console.log("srcObject");
@@ -160,15 +160,23 @@ var PeerManager =  (function () {
     }
 
     return {
-        getId : function () {
+
+        getId: function () {
             return localId;
         },
 
         peerInit: function (remoteId) {
             console.log("peerInit");
-            peer =  addPeer(remoteId);
+            peer = addPeer(remoteId);
             send('init', remoteId, null);
         },
+
+        sendReady:function () {
+            socket.emit('readyToStream', {
+                name:"webClient",
+                from:localId
+            });
+        }
 
 
     }
